@@ -67,4 +67,4 @@ logging:
 
 # 备份配置
 backup:
-  path: ./backups
+  path: E:/design/auto-reply management/backend/backups
