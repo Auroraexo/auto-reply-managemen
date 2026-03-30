@@ -1,0 +1,70 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /api
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
+
+spring:
+  application:
+    name: wechat-auto-reply-system
+  
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/wechat_auto_reply?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&useSSL=false&allowPublicKeyRetrieval=true&connectTimeout=5000&socketTimeout=30000
+    username: root
+    password: 123456
+    hikari:
+      maximum-pool-size: 20
+      minimum-idle: 5
+      connection-timeout: 30000
+      idle-timeout: 600000
+      max-lifetime: 1800000
+      pool-name: WeChatHikariCP
+  
+  jackson:
+    time-zone: Asia/Shanghai
+    date-format: yyyy-MM-dd HH:mm:ss
+    default-property-inclusion: non_null
+
+mybatis-plus:
+  mapper-locations: classpath*:/mapper/**/*.xml
+  type-aliases-package: com.wechat.autoreply.entity
+  configuration:
+    map-underscore-to-camel-case: true
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  global-config:
+    db-config:
+      id-type: assign_id
+      logic-delete-field: deleted
+      logic-delete-value: 1
+      logic-not-delete-value: 0
+
+wechat:
+  official-account:
+    app-id: ${WECHAT_APP_ID:your_app_id}
+    secret: ${WECHAT_SECRET:your_secret}
+    token: ${WECHAT_TOKEN:your_token}
+    aes-key: ${WECHAT_AES_KEY:your_aes_key}
+    message-url: https://api.weixin.qq.com/cgi-bin/message/custom/send?access_token=
+    user-info-url: https://api.weixin.qq.com/cgi-bin/user/info?access_token=%s&openid=%s&lang=zh_CN
+    access-token-url: https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=%s&secret=%s
+
+jwt:
+  secret: ${JWT_SECRET:your_jwt_secret_key_should_be_at_least_32_characters_long}
+  expiration: 86400000
+  header: Authorization
+  prefix: Bearer 
+
+logging:
+  level:
+    root: INFO
+    com.wechat.autoreply: DEBUG
+  pattern:
+    console: '%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n'
+
+# 备份配置
+backup:
+  path: ./backups
